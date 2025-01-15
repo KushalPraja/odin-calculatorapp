@@ -3,8 +3,18 @@
     display: flex;
     flex-wrap: wrap;
     max-width: 300px;
+
     
 }
+
+
+
+#result{
+    display: flex;
+    justify-self: center;
+    align-self: center;
+}
+
 
 
 .button-17 {

@@ -1,3 +1,9 @@
+
+let previousNUM="";
+let currentNUM="0";
+let operator="";
+
+
 for (let i=0;i<10;i++){
 
     const newButton= document.createElement('button');
@@ -9,9 +15,40 @@ for (let i=0;i<10;i++){
 
     //button event listerner
     newButton.addEventListener("click", function(){
-        AddNum(`Button ${i}`)} );
+    TypeNum(i)} );
 }
 
+//creating operators
+
+const operators = ["+", "-", "*", "/", "="];
+for (let i = 0; i < operators.length; i++) {
+    const newButton = document.createElement("button");
+    newButton.innerText = operators[i];
+    newButton.className = "button-17";
+    newButton.id = `operator ${operators[i]}`;
+    var containers = document.getElementById("con1");
+    containers.appendChild(newButton);
+
+    if (operators[i] === "=") {
+        newButton.addEventListener("click", evaluateResult);
+    }
+    else {
+        newButton.addEventListener("click", function () {
+            handleoperator(operators[i]);
+        });
+    }
+}
+
+//creating clear button
+const clearButton = document.createElement("button");
+clearButton.innerText = "C";
+clearButton.className = "button-17";
+clearButton.id = "clear";
+var containers = document.getElementById("con1");
+containers.appendChild(clearButton);
+
+
+// functions for add,subtract,multiply,divide
 function add(x,y){
     return x+y;
 }
@@ -25,50 +62,35 @@ function divide(x,y){
     return x/y;
 }
 
-let previousNUM=0;
-let currentNUM=0;
-let operator="";
-
-
-var operators=Array.from(document.getElementsByClassName("operator"));
-operators.forEach(operator=> {
-    if (operator.id!="equal"){
-        operator.addEventListener("click", function () {
-            handloperator(operator.innerHTML);
-        });
-    }
-    else {
-        newButton.addEventListener("click", evaluateResult());
-    }
-});
 
 ///handling operators
 
 function handleoperator(op) {
     if (currentNUM === "") return; // Ignore if no number is currently entered
+    //handle if contintuous operators are pressed 
+    if (currentNUM !== "" && previousNUM !== "" && operator !== "") {
+        evaluateResult();
+    }
     operator = op;                 // Set the operator
-    previousNUM = currentNum;      // Store the first number
+    previousNUM = currentNUM;      // Store the first number
     currentNUM = "";               // Reset for the second number
     document.getElementById("result").innerHTML = ""; // Clear the display
 }
 
 
-function AddNum(a){
-    var y=document.getElementById(a).innerHTML;
-    console.log(y)
-    currentNUM=parseInt(currentNUM)*10;
-    currentNUM+=parseInt(y);
-    document.getElementById("result").innerHTML=currentNUM;
-
+function TypeNum(a) {
+    if (currentNUM === "0") currentNUM = ""; // Ignore leading zeros
+    currentNUM += a; // Concatenate digits as strings
+    document.getElementById("result").innerHTML = currentNUM;
+    console.log(currentNUM);
 }
+
 
 function evaluateResult() {
     if (previousNUM === "" || currentNUM === "" || operator === null) return;
-
-    const num1 = parseFloat(previousNUM);
-    const num2 = parseFloat(currentNUM);
+    const num1 = parseInt(previousNUM);
+    const num2 = parseInt(currentNUM);
     let result;
-
     switch (operator) {
         case "+":
             result = add(num1, num2);

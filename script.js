@@ -3,6 +3,16 @@ let previousNUM="";
 let currentNUM="0";
 let operator="";
 
+document.getElementById("result").innerHTML=currentNUM;
+
+
+//creating clear button
+const clearButton = document.createElement("button");
+clearButton.innerText = "C";
+clearButton.className = "button-17";
+clearButton.id = "clear";
+var containers = document.getElementById("con1");
+containers.appendChild(clearButton);
 
 for (let i=0;i<10;i++){
 
@@ -20,16 +30,30 @@ for (let i=0;i<10;i++){
 
 //creating operators
 
-const operators = ["+", "-", "*", "/", "="];
+const operators = ["+", "-", "×", "÷", "="];
 for (let i = 0; i < operators.length; i++) {
     const newButton = document.createElement("button");
     newButton.innerText = operators[i];
     newButton.className = "button-17";
-    newButton.id = `operator ${operators[i]}`;
-    var containers = document.getElementById("con1");
-    containers.appendChild(newButton);
+    
+
+    //make them bold
+    if (operators[i] === "+" || operators[i] === "-" || operators[i] === "×" || operators[i] === "÷") {
+        newButton.style.fontWeight = "bolder";
+        newButton.style.fontSize = "24px";
+    }
 
     if (operators[i] === "=") {
+        newButton.id = "equals";
+        document.getElementById("con1").appendChild(newButton)
+    }
+    else{newButton.id = `operator ${operators[i]}`
+    document.getElementById("operators").appendChild(newButton);
+    };
+   
+    
+    if (operators[i] === "=") {
+       
         newButton.addEventListener("click", evaluateResult);
     }
     else {
@@ -39,13 +63,16 @@ for (let i = 0; i < operators.length; i++) {
     }
 }
 
-//creating clear button
-const clearButton = document.createElement("button");
-clearButton.innerText = "C";
-clearButton.className = "button-17";
-clearButton.id = "clear";
-var containers = document.getElementById("con1");
-containers.appendChild(clearButton);
+
+
+
+clearButton.addEventListener("click", function () {
+    previousNUM = "";
+    currentNUM = "0";
+    operator = "";
+    document.getElementById("result").innerHTML = currentNUM;
+});
+
 
 
 // functions for add,subtract,multiply,divide
@@ -69,12 +96,18 @@ function handleoperator(op) {
     if (currentNUM === "") return; // Ignore if no number is currently entered
     //handle if contintuous operators are pressed 
     if (currentNUM !== "" && previousNUM !== "" && operator !== "") {
+        
         evaluateResult();
+        document.getElementById("result").innerHTML = currentNUM;
+    }
+
+    else{
+        document.getElementById("result").innerHTML = currentNUM;
     }
     operator = op;                 // Set the operator
     previousNUM = currentNUM;      // Store the first number
     currentNUM = "";               // Reset for the second number
-    document.getElementById("result").innerHTML = ""; // Clear the display
+     // Clear the display
 }
 
 
@@ -98,10 +131,10 @@ function evaluateResult() {
         case "-":
             result = subtract(num1, num2);
             break;
-        case "*":
+        case "×":
             result = multiply(num1, num2);
             break;
-        case "/":
+        case "÷":
             result = num2 !== 0 ? divide(num1, num2) : "Error"; // Avoid division by zero
             break;
     }

@@ -53,7 +53,7 @@ for (let i = 0; i < operators.length; i++) {
    
     
     if (operators[i] === "=") {
-       
+
         newButton.addEventListener("click", evaluateResult);
     }
     else {
